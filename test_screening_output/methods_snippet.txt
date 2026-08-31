@@ -1,0 +1,1 @@
+Virtual screening discrimination and early enrichment were statistically assessed using DockCert v1.0.0 (Monreal-Hernández, 2026), yielding ROC-AUC = 0.973 [0.96, 0.99], BEDROC (\alpha = 20.0) = 0.784, EF_{1\%} = 29.1 with 95% stratified bootstrap confidence intervals across 50 active and 1500 decoy molecules. Overall docking validation status was certified as PASS.

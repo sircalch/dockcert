@@ -1,0 +1,26 @@
+{
+  "title": "DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies",
+  "description": "An open-source scientific toolkit for rigorous quality assurance, redocking RMSD calculation, virtual screening early enrichment metrics (BEDROC, RIE, EF1%, EF5%, EF10%, ROC-AUC, PR-AUC), decoy bias diagnostics, bootstrap confidence intervals, and manuscript-ready reporting.",
+  "creators": [
+    {
+      "name": "Monreal-Hernández, Andre",
+      "affiliation": "Doctoral Research Group"
+    }
+  ],
+  "access_right": "open",
+  "license": "MIT",
+  "keywords": [
+    "molecular docking",
+    "virtual screening",
+    "enrichment factor",
+    "BEDROC",
+    "ROC-AUC",
+    "AutoDock Vina",
+    "Smina",
+    "GNINA",
+    "Glide",
+    "GOLD",
+    "scientific software"
+  ],
+  "upload_type": "software"
+}

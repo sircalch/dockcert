@@ -1,0 +1,8 @@
+Validation Metric,Value,95% Bootstrap CI,Pass Threshold,Status,Diagnostic Finding
+Redocking Pose RMSD (Best),1.43 A,N/A,<= 2.0 A,PASS,Excellent redocking accuracy (Best RMSD = 1.43 A <= 2.0 A).
+ROC-AUC,0.960,"[0.946, 0.971]",>= 0.70,PASS,Strong discrimination (ROC-AUC = 0.96 >= 0.70).
+BEDROC (alpha=20.0),0.701,"[0.624, 0.767]",>= 0.50,PASS,Strong discrimination (BEDROC (alpha=20.0) = 0.70 >= 0.50).
+EF 1%,17.000,"[13.000, 20.000]",>= 5.00,PASS,Strong discrimination (EF 1% = 17.00 >= 5.00).
+EF 5%,10.600,"[8.800, 12.400]",>= 3.00,PASS,Strong discrimination (EF 5% = 10.60 >= 3.00).
+Optimal MCC,0.525,N/A,>= 0.40,PASS,Strong discrimination (Optimal MCC = 0.53 >= 0.40).
+Decoy Property Bias,Risk: LOW,N/A,LOW Risk,PASS,Decoys and actives are well property-matched. Low risk of artificial enrichment bias.

@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dockcert"
+version = "1.0.0"
+description = "Automated Statistical Validation, Enrichment Metrics, and Reproducibility Toolkit for Molecular Docking and Virtual Screening"
+readme = "README.md"
+authors = [
+    { name = "Andre Monreal-Hernández", email = "amonreal@example.com" }
+]
+license = { text = "MIT" }
+keywords = [
+    "molecular-docking",
+    "virtual-screening",
+    "autodock-vina",
+    "smina",
+    "gnina",
+    "glide",
+    "gold",
+    "roc-auc",
+    "bedroc",
+    "enrichment-factor",
+    "rmsd",
+    "reproducibility",
+    "chemoinformatics",
+    "drug-discovery"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent"
+]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy>=1.20.0",
+    "scipy>=1.7.0",
+    "pandas>=1.3.0",
+    "matplotlib>=3.5.0",
+    "jinja2>=3.0.0",
+    "scikit-learn>=1.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "build>=0.10.0",
+    "twine>=4.0.0"
+]
+
+[project.scripts]
+dockcert = "dockcert.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/amonreal/dockcert"
+Documentation = "https://github.com/amonreal/dockcert#readme"
+Repository = "https://github.com/amonreal/dockcert.git"
+"Bug Tracker" = "https://github.com/amonreal/dockcert/issues"
+Changelog = "https://github.com/amonreal/dockcert/blob/main/CHANGELOG.md"

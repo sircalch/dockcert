@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DockCert Molecular Docking Validation Report</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --pass-color: #10b981;
+            --pass-bg: rgba(16, 185, 129, 0.15);
+            --warn-color: #f59e0b;
+            --warn-bg: rgba(245, 158, 11, 0.15);
+            --fail-color: #ef4444;
+            --fail-bg: rgba(239, 68, 68, 0.15);
+            --accent-blue: #38bdf8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .title-group h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+        .title-group p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .badge-pass { background-color: var(--pass-bg); color: var(--pass-color); border: 1px solid var(--pass-color); }
+        .badge-warning { background-color: var(--warn-bg); color: var(--warn-color); border: 1px solid var(--warn-color); }
+        .badge-fail { background-color: var(--fail-bg); color: var(--fail-color); border: 1px solid var(--fail-color); }
+        
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .card-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+        .card-value {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .card-subtext {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+        th, td {
+            padding: 0.85rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+        th {
+            background-color: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .tag-pass { background-color: var(--pass-bg); color: var(--pass-color); }
+        .tag-warning { background-color: var(--warn-bg); color: var(--warn-color); }
+        .tag-fail { background-color: var(--fail-bg); color: var(--fail-color); }
+
+        .box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        pre {
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            color: #38bdf8;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            white-space: pre-wrap;
+        }
+        .btn-copy {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .btn-copy:hover { background-color: #1d4ed8; }
+
+        footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--card-border);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="title-group">
+                <h1>DockCert Validation Dashboard</h1>
+                <p>Automated Quality Assurance for Molecular Docking and Virtual Screening</p>
+            </div>
+            <div>
+                <span class="status-badge badge-pass">
+                    PASS
+                </span>
+            </div>
+        </header>
+
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-label">Validation Status</div>
+                <div class="card-value" style="font-size: 1.2rem;">VALIDATION STATUS = FULLY CERTIFIED</div>
+                <div class="card-subtext">1550 compounds screened</div>
+            </div>
+            
+            <div class="card">
+                <div class="card-label">ROC-AUC (95% CI)</div>
+                <div class="card-value">0.973</div>
+                <div class="card-subtext">
+                    
+                    [0.96, 0.99]
+                    
+                </div>
+            </div>
+            
+            
+            <div class="card">
+                <div class="card-label">BEDROC (&alpha;=20.0)</div>
+                <div class="card-value">0.784</div>
+                <div class="card-subtext">Early enrichment (top 8%)</div>
+            </div>
+            
+            
+            <div class="card">
+                <div class="card-label">Enrichment Factor (1%)</div>
+                <div class="card-value">29.1 &times;</div>
+                <div class="card-subtext">Top 1% active recovery</div>
+            </div>
+            
+            
+        </div>
+
+        <h2 class="section-title">Enrichment & Validation Metrics</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Observed Value</th>
+                    <th>95% Bootstrap CI</th>
+                    <th>Pass Threshold</th>
+                    <th>Status</th>
+                    <th>Diagnostic Finding</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td><strong>ROC-AUC</strong></td>
+                    <td>0.973</td>
+                    <td>
+                        
+                        [0.957, 0.985]
+                        
+                    </td>
+                    <td>&ge; 0.70</td>
+                    <td><span class="tag tag-pass">PASS</span></td>
+                    <td style="color: var(--text-secondary)">Strong discrimination (ROC-AUC = 0.97 >= 0.70).</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>BEDROC (alpha=20.0)</strong></td>
+                    <td>0.784</td>
+                    <td>
+                        
+                        [0.701, 0.855]
+                        
+                    </td>
+                    <td>&ge; 0.50</td>
+                    <td><span class="tag tag-pass">PASS</span></td>
+                    <td style="color: var(--text-secondary)">Strong discrimination (BEDROC (alpha=20.0) = 0.78 >= 0.50).</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>EF 1%</strong></td>
+                    <td>29.062</td>
+                    <td>
+                        
+                        [25.188, 31.000]
+                        
+                    </td>
+                    <td>&ge; 5.00</td>
+                    <td><span class="tag tag-pass">PASS</span></td>
+                    <td style="color: var(--text-secondary)">Strong discrimination (EF 1% = 29.06 >= 5.00).</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>EF 5%</strong></td>
+                    <td>14.705</td>
+                    <td>
+                        
+                        [12.321, 16.692]
+                        
+                    </td>
+                    <td>&ge; 3.00</td>
+                    <td><span class="tag tag-pass">PASS</span></td>
+                    <td style="color: var(--text-secondary)">Strong discrimination (EF 5% = 14.71 >= 3.00).</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>Optimal MCC</strong></td>
+                    <td>0.610</td>
+                    <td>
+                        
+                        N/A
+                        
+                    </td>
+                    <td>&ge; 0.40</td>
+                    <td><span class="tag tag-pass">PASS</span></td>
+                    <td style="color: var(--text-secondary)">Strong discrimination (Optimal MCC = 0.61 >= 0.40).</td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        
+
+        <h2 class="section-title">Methods Section Snippet (Publication Ready)</h2>
+        <div class="box">
+            <pre id="methodsSnippet">Virtual screening discrimination and early enrichment were statistically assessed using DockCert v1.0.0 (Monreal-Hernández, 2026), yielding ROC-AUC = 0.973 [0.96, 0.99], BEDROC (\alpha = 20.0) = 0.784, EF_{1\%} = 29.1 with 95% stratified bootstrap confidence intervals across 50 active and 1500 decoy molecules. Overall docking validation status was certified as PASS.
+</pre>
+            <button class="btn-copy" onclick="copyToClipboard('methodsSnippet')">Copy Methods Paragraph</button>
+        </div>
+
+        <h2 class="section-title">BibTeX Citation</h2>
+        <div class="box">
+            <pre id="bibSnippet">@software{monreal2026dockcert,
+  author = {Monreal-Hern\'andez, Andre},
+  title = {{DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies}},
+  year = {2026},
+  version = {1.0.0},
+  publisher = {Zenodo},
+  url = {https://github.com/amonreal/dockcert}
+}
+</pre>
+            <button class="btn-copy" onclick="copyToClipboard('bibSnippet')">Copy BibTeX</button>
+        </div>
+
+        <footer>
+            Generated automatically by <strong>DockCert v1.0.0</strong> &bull; Molecular Docking Validation & Statistical Quality Toolkit &bull; Monreal-Hernández, 2026.
+        </footer>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Error copying: ', err);
+            });
+        }
+    </script>
+</body>
+</html>

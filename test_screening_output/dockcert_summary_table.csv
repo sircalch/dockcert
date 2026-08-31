@@ -1,0 +1,6 @@
+Validation Metric,Value,95% Bootstrap CI,Pass Threshold,Status,Diagnostic Finding
+ROC-AUC,0.973,"[0.957, 0.985]",>= 0.70,PASS,Strong discrimination (ROC-AUC = 0.97 >= 0.70).
+BEDROC (alpha=20.0),0.784,"[0.701, 0.855]",>= 0.50,PASS,Strong discrimination (BEDROC (alpha=20.0) = 0.78 >= 0.50).
+EF 1%,29.062,"[25.188, 31.000]",>= 5.00,PASS,Strong discrimination (EF 1% = 29.06 >= 5.00).
+EF 5%,14.705,"[12.321, 16.692]",>= 3.00,PASS,Strong discrimination (EF 5% = 14.71 >= 3.00).
+Optimal MCC,0.610,N/A,>= 0.40,PASS,Strong discrimination (Optimal MCC = 0.61 >= 0.40).
