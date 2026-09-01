@@ -69,3 +69,7 @@ Documentation = "https://github.com/amonreal/dockcert#readme"
 Repository = "https://github.com/amonreal/dockcert.git"
 "Bug Tracker" = "https://github.com/amonreal/dockcert/issues"
 Changelog = "https://github.com/amonreal/dockcert/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+include = ["dockcert*"]
+
