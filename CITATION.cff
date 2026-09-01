@@ -1,4 +1,4 @@
-cff-version: 1.2.0
+﻿cff-version: 1.2.0
 message: "If you use DockCert in your research to validate molecular docking studies or benchmark virtual screening enrichment metrics, please cite it as below."
 authors:
   - family-names: "Monreal-Hernández"
@@ -7,8 +7,8 @@ authors:
 title: "DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies"
 version: 1.0.0
 date-released: 2026-08-31
-url: "https://github.com/amonreal/dockcert"
-repository-code: "https://github.com/amonreal/dockcert"
+url: "https://github.com/sircalch/dockcert"
+repository-code: "https://github.com/sircalch/dockcert"
 keywords:
   - "molecular docking"
   - "virtual screening"
@@ -19,3 +19,4 @@ keywords:
   - "reproducibility"
   - "drug discovery"
 license: MIT
+

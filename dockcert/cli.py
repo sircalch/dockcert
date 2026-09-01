@@ -1,4 +1,4 @@
-"""
+﻿"""
 Command Line Interface (CLI) for DockCert.
 """
 
@@ -180,11 +180,11 @@ def print_citation():
   year = {2026},
   version = {1.0.0},
   publisher = {Zenodo},
-  url = {https://github.com/amonreal/dockcert}
+  url = {https://github.com/sircalch/dockcert}
 }"""
     print("\nIf you use DockCert in your publications, please cite:\n")
     print("APA Style:")
-    print("Monreal-Hernández, A. (2026). DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies (v1.0.0). Zenodo. https://github.com/amonreal/dockcert\n")
+    print("Monreal-Hernández, A. (2026). DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies (v1.0.0). Zenodo. https://github.com/sircalch/dockcert\n")
     print("BibTeX:")
     print(bib)
     print()
@@ -238,3 +238,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

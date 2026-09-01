@@ -1,6 +1,6 @@
-# DockCert
+﻿# DockCert
 
-[![CI](https://github.com/amonreal/dockcert/actions/workflows/test.yml/badge.svg)](https://github.com/amonreal/dockcert/actions)
+[![CI](https://github.com/sircalch/dockcert/actions/workflows/test.yml/badge.svg)](https://github.com/sircalch/dockcert/actions)
 [![PyPI version](https://img.shields.io/pypi/v/dockcert.svg?color=blue)](https://pypi.org/project/dockcert/)
 [![Python versions](https://img.shields.io/pypi/pyversions/dockcert.svg)](https://pypi.org/project/dockcert/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -63,7 +63,7 @@ pip install dockcert
 
 ### From Source
 ```bash
-git clone https://github.com/amonreal/dockcert.git
+git clone https://github.com/sircalch/dockcert.git
 cd dockcert
 pip install -e .[dev]
 ```
@@ -133,7 +133,7 @@ If you use DockCert to evaluate molecular docking validation or virtual screenin
   year = {2026},
   version = {1.0.0},
   publisher = {Zenodo},
-  url = {https://github.com/amonreal/dockcert}
+  url = {https://github.com/sircalch/dockcert}
 }
 ```
 
@@ -142,3 +142,4 @@ If you use DockCert to evaluate molecular docking validation or virtual screenin
 ## License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
