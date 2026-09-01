@@ -3,9 +3,19 @@
   "description": "An open-source scientific toolkit for rigorous quality assurance, redocking RMSD calculation, virtual screening early enrichment metrics (BEDROC, RIE, EF1%, EF5%, EF10%, ROC-AUC, PR-AUC), decoy bias diagnostics, bootstrap confidence intervals, and manuscript-ready reporting.",
   "creators": [
     {
-      "name": "Monreal-Hernández, Andres",
+      "name": "Monreal-Hernández, Andrés",
       "orcid": "0009-0009-1207-8597",
-      "affiliation": "Doctoral Research Group"
+      "affiliation": "Universidad Estatal de Sonora"
+    },
+    {
+      "name": "Franco-Amaya, Sara Lizbeth",
+      "orcid": "0009-0005-0272-0241",
+      "affiliation": "Doctorado en Nanotecnología, Universidad de Sonora"
+    },
+    {
+      "name": "Martínez-Osorio, Carlos Ivanhoe",
+      "orcid": "0009-0003-7872-4965",
+      "affiliation": "Doctorado en Ciencia de Materiales, Universidad de Sonora"
     }
   ],
   "access_right": "open",
