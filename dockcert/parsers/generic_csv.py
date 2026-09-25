@@ -42,7 +42,7 @@ def load_docking_csv(
     try:
         df = pd.read_csv(filepath, sep=None, engine='python', comment='#')
     except Exception:
-        df = pd.read_csv(filepath, delim_whitespace=True, comment='#')
+        df = pd.read_csv(filepath, sep=r'\s+', comment='#')
         
     df.columns = [str(c).strip() for c in df.columns]
     
