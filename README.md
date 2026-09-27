@@ -4,7 +4,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/dockcert.svg?color=blue)](https://pypi.org/project/dockcert/)
 [![Python versions](https://img.shields.io/pypi/pyversions/dockcert.svg)](https://pypi.org/project/dockcert/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1234568.svg)](https://doi.org/10.5281/zenodo.1234568)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22217570.svg)](https://doi.org/10.5281/zenodo.22217570)
 
 > **Automated Statistical Validation, Early Enrichment Metrics, and Reproducibility Assessment for Molecular Docking and Virtual Screening Studies.**
 
