@@ -3,6 +3,7 @@
 Needs rdkit, meeko 0.8, pdbfixer/openmm and the Vina 1.2.7 executable saved as vina.exe next to this
 script; the RCSB entries 3PTB, 1STP and 1HSG are expected here as <ID>.pdb. Outputs are copied to
 tests/data/redock/. Usage: python redock_vina.py [PDB IDs]
+"""
 import os
 import subprocess
 import sys
