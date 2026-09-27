@@ -234,8 +234,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             {% endif %}
             {% if report.redocking_result %}
             <div class="card">
-                <div class="card-label">Redocking RMSD</div>
-                <div class="card-value">{{ "%.2f"|format(report.redocking_result.min_rmsd) }} <span style="font-size: 0.9rem; color: var(--text-secondary)">&Aring;</span></div>
+                <div class="card-label">Redocking RMSD (top-1)</div>
+                <div class="card-value">{{ "%.2f"|format(report.redocking_result.top_rmsd) }} <span style="font-size: 0.9rem; color: var(--text-secondary)">&Aring;</span></div>
                 <div class="card-subtext">Status: {{ report.redocking_result.status }}</div>
             </div>
             {% endif %}

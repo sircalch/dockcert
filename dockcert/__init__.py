@@ -3,7 +3,7 @@ DockCert: Automated Statistical Validation, Enrichment Metrics, and Reproducibil
 Assessment for Molecular Docking and Virtual Screening Studies.
 """
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __author__ = "Andres Monreal-Hernández"
 __license__ = "MIT"
 

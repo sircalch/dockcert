@@ -144,7 +144,7 @@ def generate_docking_figures(
         ax.axvline(2.0, color="#dc2626", linestyle="--", linewidth=2.0, label="2.0 A Success Threshold")
         ax.set_xlabel("Pose RMSD (Angstroms)")
         ax.set_ylabel("Frequency")
-        ax.set_title(f"Redocking Pose Accuracy (Best RMSD = {np.min(rmsds):.2f} A)")
+        ax.set_title(f"Redocking pose accuracy (top-1 RMSD = {rmsds[0]:.2f} A, best = {np.min(rmsds):.2f} A)")
         ax.grid(True)
         ax.legend(frameon=True)
         plt.tight_layout()

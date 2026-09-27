@@ -43,6 +43,7 @@ def assess_docking_quality(
     labels: Optional[np.ndarray] = None,
     scores: Optional[np.ndarray] = None,
     rmsd_values: Optional[List[float]] = None,
+    rmsd_ranked_poses: bool = False,
     active_properties: Optional[Dict[str, np.ndarray]] = None,
     decoy_properties: Optional[Dict[str, np.ndarray]] = None,
     lower_is_better: bool = True,
@@ -64,6 +65,10 @@ def assess_docking_quality(
         Docking scores.
     rmsd_values : list of float, optional
         Pose RMSD values from redocking/cross-docking experiments.
+    rmsd_ranked_poses : bool, default False
+        True if rmsd_values are the ranked poses of a single docking run (verdict on the top-1
+        pose); False if they are top-1 RMSDs across a benchmark of complexes (verdict on the
+        success rate).
     active_properties : dict, optional
         Properties for active ligands.
     decoy_properties : dict, optional
@@ -82,7 +87,7 @@ def assess_docking_quality(
     # 1. Redocking Evaluation
     redocking_res = None
     if rmsd_values is not None and len(rmsd_values) > 0:
-        redocking_res = evaluate_redocking_success(rmsd_values)
+        redocking_res = evaluate_redocking_success(rmsd_values, ranked_poses=rmsd_ranked_poses)
         statuses.append(redocking_res["status"])
         if redocking_res["status"] != "PASS":
             recommendations.append(redocking_res["recommendation"])

@@ -9,7 +9,8 @@ import numpy as np
 
 from dockcert import __version__
 from dockcert.parsers.generic_csv import load_docking_csv
-from dockcert.parsers.structure_io import load_molecule_coordinates
+from dockcert.parsers.structure_io import load_molecule_coordinates, load_poses
+from dockcert.parsers.vina_smina import parse_vina_log
 from dockcert.core.rmsd import calculate_heavy_atom_rmsd, calculate_symmetry_corrected_rmsd
 from dockcert.core.scoring import assess_docking_quality
 from dockcert.reporters.plot_generator import generate_docking_figures
@@ -131,18 +132,22 @@ def run_assess(args):
     # RMSD from structures if provided
     rmsd_values = None
     if args.ref_ligand and args.docked_pose:
-        print("  -> Calculating heavy-atom RMSD between reference and docked pose...")
         c_ref, el_ref = load_molecule_coordinates(args.ref_ligand)
-        c_dock, el_dock = load_molecule_coordinates(args.docked_pose)
-        rmsd_val = calculate_symmetry_corrected_rmsd(c_ref, c_dock, elements=el_ref)
-        rmsd_values = [rmsd_val]
-        print(f"  -> Calculated Redocking RMSD: {rmsd_val:.2f} A")
+        poses = load_poses(args.docked_pose)
+        print(f"  -> Symmetry-corrected heavy-atom RMSD of {len(poses)} pose(s) vs the reference ({len(c_ref)} heavy atoms)...")
+        rmsd_values = [calculate_symmetry_corrected_rmsd(c_ref, c, elements=el_ref, elements_dock=el)
+                       for c, el in poses]
+        affs = parse_vina_log(args.vina_log)[0] if getattr(args, "vina_log", None) else []
+        for i, r in enumerate(rmsd_values):
+            a = f"  {affs[i]:7.2f} kcal/mol" if i < len(affs) else ""
+            print(f"     pose {i + 1}: {r:5.2f} A{a}")
         
     print("  -> Performing statistical validation and enrichment analysis...")
     report = assess_docking_quality(
         labels=labels,
         scores=scores,
         rmsd_values=rmsd_values,
+        rmsd_ranked_poses=True,
         lower_is_better=not args.higher_is_better
     )
     
@@ -168,7 +173,8 @@ def run_assess(args):
     for k, item in report.enrichment_metrics.items():
         print(f" * {item.name:18s}: {item.value:6.3f} | Status: {item.status}")
     if report.redocking_result:
-        print(f" * Redocking RMSD     : {report.redocking_result['min_rmsd']:.2f} A | Status: {report.redocking_result['status']}")
+        rr = report.redocking_result
+        print(f" * Redocking RMSD     : top-1 {rr['top_rmsd']:.2f} A, best of {rr['n_poses']} {rr['min_rmsd']:.2f} A | Status: {rr['status']}")
     print("="*70)
     print(f"\nReport ready at: {os.path.abspath(html_p)}\n")
 
@@ -205,7 +211,8 @@ def main():
     assess_parser.add_argument("--score-col", help="Column name containing docking scores/affinities")
     assess_parser.add_argument("--label-col", help="Column name containing active/decoy labels")
     assess_parser.add_argument("--ref-ligand", help="Reference crystallographic ligand structure (.sdf, .pdb, .pdbqt)")
-    assess_parser.add_argument("--docked-pose", help="Docked pose structure (.sdf, .pdb, .pdbqt)")
+    assess_parser.add_argument("--docked-pose", help="Docked pose(s) (.sdf, .pdb, .pdbqt); all MODELs/records are read in rank order")
+    assess_parser.add_argument("--vina-log", help="Vina/Smina log of the same run (affinities listed next to each pose)")
     assess_parser.add_argument("--higher-is-better", action="store_true", help="Set if higher score values indicate better affinity")
     assess_parser.add_argument("-o", "--output", default="dockcert_output", help="Directory for output report and assets (default: dockcert_output)")
     

@@ -6,7 +6,7 @@ authors:
     orcid: "https://orcid.org/0009-0009-1207-8597"
     affiliation: "Universidad Estatal de Sonora"
 title: "DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies"
-version: 1.0.0
+version: "1.1.0"
 date-released: 2026-08-31
 url: "https://github.com/sircalch/dockcert"
 repository-code: "https://github.com/sircalch/dockcert"

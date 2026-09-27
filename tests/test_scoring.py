@@ -27,7 +27,8 @@ def test_full_docking_validation_pipeline():
     report = assess_docking_quality(
         labels=labels,
         scores=scores,
-        rmsd_values=[1.35, 1.80, 2.50],
+        rmsd_values=[1.35, 1.80, 2.50],   # ranked poses of one redocking run
+        rmsd_ranked_poses=True,
         lower_is_better=True
     )
     

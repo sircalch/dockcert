@@ -36,8 +36,8 @@ def generate_docking_manuscript_assets(
     if report.redocking_result is not None:
         rr = report.redocking_result
         rows.append({
-            "Validation Metric": "Redocking Pose RMSD (Best)",
-            "Value": f"{rr['min_rmsd']:.2f} A",
+            "Validation Metric": "Redocking RMSD (top-scored pose)" if rr["n_poses"] > 1 else "Redocking RMSD",
+            "Value": f"{rr['top_rmsd']:.2f} A (best of {rr['n_poses']}: {rr['min_rmsd']:.2f} A)" if rr["n_poses"] > 1 else f"{rr['top_rmsd']:.2f} A",
             "95% Bootstrap CI": "N/A",
             "Pass Threshold": "<= 2.0 A",
             "Status": rr["status"],
@@ -87,10 +87,13 @@ def generate_docking_manuscript_assets(
     
     redock_text = ""
     if report.redocking_result is not None:
-        best_rmsd = report.redocking_result["min_rmsd"]
+        rr = report.redocking_result
         redock_text = (
-            f"The docking protocol was structurally validated by redocking the co-crystallized reference ligand, "
-            f"achieving a heavy-atom Root-Mean-Square Deviation (RMSD) of {best_rmsd:.2f} \\AA relative to the experimental pose (status: {report.redocking_result['status']}). "
+            f"The docking protocol was tested by redocking the co-crystallized reference ligand. "
+            f"The top-scored pose had a symmetry-corrected heavy-atom root-mean-square deviation (RMSD) of "
+            f"{rr['top_rmsd']:.2f} \\AA from the experimental pose"
+            + (f" (best of {rr['n_poses']} poses: {rr['min_rmsd']:.2f} \\AA)" if rr["n_poses"] > 1 else "")
+            + f" (status: {rr['status']}). "
         )
         
     enrich_text = ""
