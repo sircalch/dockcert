@@ -1,0 +1,17 @@
+\begin{tabular}{llrrrrr}
+\toprule
+$\mu$ & metric & true value & 20 actives & 50 actives & 100 actives & width (50 actives) \\
+\midrule
+1 & ROC-AUC (bootstrap) & 0.760 & 0.933 & 0.913 & 0.953 & 0.129 \\
+1 & ROC-AUC (DeLong, logit) & 0.760 & 0.950 & 0.910 & 0.950 & 0.131 \\
+1 & BEDROC ($\alpha=20$) & 0.262 & 0.927 & 0.940 & 0.950 & 0.191 \\
+1 & EF$_{1\%}$ & 8.303 & 0.903 & 0.943 & 0.927 & 13.731 \\
+1 & EF$_{5\%}$ & 4.938 & 0.973 & 0.967 & 0.960 & 4.781 \\
+\midrule
+2 & ROC-AUC (bootstrap) & 0.921 & 0.870 & 0.887 & 0.950 & 0.070 \\
+2 & ROC-AUC (DeLong, logit) & 0.921 & 0.893 & 0.917 & 0.943 & 0.073 \\
+2 & BEDROC ($\alpha=20$) & 0.600 & 0.950 & 0.943 & 0.950 & 0.206 \\
+2 & EF$_{1\%}$ & 27.514 & 0.970 & 0.943 & 0.967 & 19.615 \\
+2 & EF$_{5\%}$ & 11.888 & 0.973 & 0.953 & 0.967 & 5.180 \\
+\bottomrule
+\end{tabular}

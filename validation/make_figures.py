@@ -148,6 +148,62 @@ def table_astex_per_complex(poses, run_status):
         fh.write("\n".join(lines) + "\n")
 
 
+COV = {   # metric -> (colour, marker, label)
+    "auc": ("#8a8984", "x", "ROC-AUC, percentile bootstrap"),
+    "auc_delong_logit": ("#2a78d6", "o", "ROC-AUC, DeLong (logit)"),
+    "bedroc20": ("#1baf7a", "D", r"BEDROC ($\alpha$ = 20), bootstrap"),
+    "ef1": ("#e87ba4", "^", r"EF$_{1\%}$, bootstrap"),
+    "ef5": ("#eda100", "v", r"EF$_{5\%}$, bootstrap"),
+}
+
+
+def fig_coverage(boot, delong):
+    from matplotlib.lines import Line2D
+    from scipy.stats import norm
+    d = pd.concat([boot[["mu", "actives", "metric", "coverage", "reps"]],
+                   delong[["mu", "actives", "metric", "coverage", "reps"]]], ignore_index=True)
+    fig, axes = plt.subplots(1, 2, figsize=(DOUBLE, 64 * MM), sharey=True)
+    reps = int(d.reps.iloc[0])
+    band = 1.96 * np.sqrt(0.95 * 0.05 / reps)
+    for ax, mu, letter in zip(axes, (1.0, 2.0), "ab"):
+        ax.axhspan(0.95 - band, 0.95 + band, color=INK2, alpha=0.08, lw=0)
+        ax.axhline(0.95, color=INK2, lw=0.7, ls="--")
+        for key, (c, m, lab) in COV.items():
+            e = d[(d.mu == mu) & (d.metric == key)].sort_values("actives")
+            ax.plot(e.actives, e.coverage, color=c, marker=m, label=lab, ms=4.5,
+                    mew=0.9 if m in "x+" else 0.5, mec=c if m in "x+" else "white")
+        ax.set(xscale="log", xlabel="actives in the library (50 decoys per active)", ylim=(0.82, 1.0),
+               title=rf"separation $\mu$ = {mu:g} (true ROC-AUC = {norm.cdf(mu / np.sqrt(2)):.2f})")
+        ax.set_xticks([20, 50, 100], ["20", "50", "100"])
+        ax.minorticks_off()
+        panel(ax, letter)
+    axes[0].set_ylabel("coverage (nominal 0.95)")
+    handles = [Line2D([], [], color=c, marker=m, label=l, ms=5, mew=0.9 if m in "x+" else 0.5,
+                      mec=c if m in "x+" else "white") for c, m, l in COV.values()]
+    fig.legend(handles=handles, loc="lower center", ncol=3, bbox_to_anchor=(0.5, 0.0), columnspacing=1.5)
+    fig.tight_layout(w_pad=2.0, rect=(0, 0.12, 1, 1))
+    save(fig, "fig3_coverage")
+
+
+def table_coverage(boot, delong):
+    d = pd.concat([boot, delong], ignore_index=True)
+    names = {"auc": "ROC-AUC (bootstrap)", "auc_delong_logit": "ROC-AUC (DeLong, logit)",
+             "bedroc20": r"BEDROC ($\alpha=20$)", "ef1": r"EF$_{1\%}$", "ef5": r"EF$_{5\%}$"}
+    lines = [r"\begin{tabular}{llrrrrr}", r"\toprule",
+             r"$\mu$ & metric & true value & 20 actives & 50 actives & 100 actives & width (50 actives) \\",
+             r"\midrule"]
+    for mu in (1.0, 2.0):
+        for key, name in names.items():
+            e = d[(d.mu == mu) & (d.metric == key)].set_index("actives")
+            cov = " & ".join(f"{e.loc[a, 'coverage']:.3f}" for a in (20, 50, 100))
+            lines.append(f"{mu:g} & {name} & {e['true'].iloc[0]:.3f} & {cov} & {e.loc[50, 'median_width']:.3f} " + r"\\")
+        if mu == 1.0:
+            lines.append(r"\midrule")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    with open(os.path.join(TAB, "table_coverage.tex"), "w") as fh:
+        fh.write("\n".join(lines) + "\n")
+
+
 def main():
     os.makedirs(FIG, exist_ok=True)
     os.makedirs(TAB, exist_ok=True)
@@ -170,6 +226,11 @@ def main():
                     st = json.loads(z.read(n))
                     status[st["id"]] = st
     table_astex_per_complex(poses, status)
+    bp, dp = os.path.join(RES, "bootstrap_coverage.csv"), os.path.join(RES, "auc_ci_coverage.csv")
+    if os.path.exists(bp) and os.path.exists(dp):
+        boot, delong = pd.read_csv(bp), pd.read_csv(dp)
+        fig_coverage(boot, delong)
+        table_coverage(boot, delong)
     print(succ[["method", "criterion", "k", "n", "success", "ci_low", "ci_high"]].to_string(index=False))
 
 
