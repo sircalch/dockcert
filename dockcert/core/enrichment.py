@@ -55,6 +55,48 @@ def calculate_roc_auc(
     return float(auc)
 
 
+def calculate_roc_auc_ci(
+    labels: np.ndarray,
+    scores: np.ndarray,
+    lower_is_better: bool = True,
+    confidence_level: float = 0.95,
+) -> Tuple[float, float, float]:
+    """
+    ROC-AUC with a DeLong confidence interval computed on the logit scale.
+
+    The variance is the DeLong estimate from the structural components of the Mann-Whitney
+    statistic (DeLong, DeLong & Clarke-Pearson, Biometrics 1988); the interval
+    logit(AUC) +/- z SE / (AUC (1 - AUC)) is transformed back, so it stays inside (0, 1) and is
+    asymmetric near the bounds, where percentile bootstrap intervals are too narrow.
+
+    Returns
+    -------
+    (auc, ci_low, ci_high)
+    """
+    from scipy.stats import norm
+    y = np.asarray(labels, dtype=int)
+    s = -np.asarray(scores, dtype=float) if lower_is_better else np.asarray(scores, dtype=float)
+    x_act, x_dec = s[y == 1], s[y == 0]
+    m, n = len(x_act), len(x_dec)
+    if m < 2 or n < 2:
+        auc = calculate_roc_auc(labels, scores, lower_is_better)
+        return auc, float("nan"), float("nan")
+    # psi(a, d) = 1 if a > d, 0.5 if tied; structural components via ranks
+    order = np.sort(x_dec)
+    v10 = (np.searchsorted(order, x_act, side="left") + np.searchsorted(order, x_act, side="right")) / (2.0 * n)
+    order_a = np.sort(x_act)
+    v01 = 1.0 - (np.searchsorted(order_a, x_dec, side="left") + np.searchsorted(order_a, x_dec, side="right")) / (2.0 * m)
+    auc = float(np.mean(v10))
+    var = float(np.var(v10, ddof=1) / m + np.var(v01, ddof=1) / n)
+    if auc <= 0.0 or auc >= 1.0 or var <= 0.0:
+        return auc, auc, auc
+    z = norm.ppf(0.5 + confidence_level / 2.0)
+    lg = np.log(auc / (1.0 - auc))
+    half = z * np.sqrt(var) / (auc * (1.0 - auc))
+    lo, hi = 1.0 / (1.0 + np.exp(-(lg - half))), 1.0 / (1.0 + np.exp(-(lg + half)))
+    return auc, float(lo), float(hi)
+
+
 def calculate_pr_auc(
     labels: np.ndarray,
     scores: np.ndarray,

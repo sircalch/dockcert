@@ -10,6 +10,7 @@ from dockcert.core.enrichment import evaluate_all_enrichment_metrics
 from dockcert.core.rmsd import evaluate_redocking_success
 from dockcert.core.bias import evaluate_decoy_bias
 from dockcert.core.bootstrap import bootstrap_enrichment_ci
+from dockcert.core.enrichment import calculate_roc_auc_ci
 
 
 @dataclass
@@ -102,6 +103,9 @@ def assess_docking_quality(
         
         raw_metrics = evaluate_all_enrichment_metrics(y_true, y_scores, lower_is_better=lower_is_better)
         ci_results = bootstrap_enrichment_ci(y_true, y_scores, lower_is_better=lower_is_better)
+        # ROC-AUC: DeLong interval on the logit scale, which covered the true AUC more often than the
+        # percentile bootstrap in the binormal validation (validation/auc_ci_coverage.py)
+        ci_results["roc_auc"] = calculate_roc_auc_ci(y_true, y_scores, lower_is_better=lower_is_better)
         
         dataset_summary = {
             "n_total": raw_metrics["n_total"],

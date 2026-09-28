@@ -92,7 +92,16 @@ def dock(job):
         return lid, label, "", str(e)[:150].replace("\n", " ")
 
 
+def keep_awake():
+    """Ask Windows not to sleep while this process runs (released automatically when it exits)."""
+    if os.name == "nt":
+        import ctypes
+        ES_CONTINUOUS, ES_SYSTEM_REQUIRED = 0x80000000, 0x00000001
+        ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)
+
+
 def main():
+    keep_awake()
     ap = argparse.ArgumentParser()
     ap.add_argument("target_dir")
     ap.add_argument("out_csv")
@@ -110,7 +119,10 @@ def main():
                 ligs.append((f"{'A' if label else 'D'}{k:05d}_{p[1] if len(p) > 1 else ''}", label, p[0]))
     done = set()
     if os.path.exists(a.out_csv):
-        done = {r["id"] for r in csv.DictReader(open(a.out_csv))}
+        # rows with a score or with a permanent error count as done; transient Vina failures
+        # (no score line, e.g. a run interrupted by system sleep) are retried
+        done = {r["id"] for r in csv.DictReader(open(a.out_csv))
+                if r["vina_score"] or not r["error"].startswith("no score")}
     new = not os.path.exists(a.out_csv)
     jobs = [(i, lab, smi, rec, centre, size, a.vina) for i, lab, smi in ligs if i not in done]
     with open(a.out_csv, "a", newline="") as fh:

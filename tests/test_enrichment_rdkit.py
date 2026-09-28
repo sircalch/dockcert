@@ -24,3 +24,21 @@ def test_metrics_match_rdkit(seed):
     assert calculate_roc_auc(y, s) == pytest.approx(Scoring.CalcAUC(ranked, 1), abs=1e-9)
     for f in (0.005, 0.01, 0.05):
         assert calculate_enrichment_factor(y, s, f)[0] == pytest.approx(Scoring.CalcEnrichment(ranked, 1, [f])[0], abs=1e-9)
+
+
+def test_delong_matches_bruteforce():
+    """DeLong variance from ranks equals the direct computation from the full psi matrix (with ties)."""
+    from scipy.stats import norm
+    from dockcert.core.enrichment import calculate_roc_auc_ci
+    rng = np.random.default_rng(3)
+    y = np.r_[np.ones(25, int), np.zeros(400, int)]
+    s = np.r_[rng.normal(-1.5, 1, 25), np.round(rng.normal(0, 1, 400), 1)]
+    a, d = -s[y == 1], -s[y == 0]
+    psi = (a[:, None] > d[None, :]) + 0.5 * (a[:, None] == d[None, :])
+    auc = psi.mean()
+    var = psi.mean(1).var(ddof=1) / len(a) + psi.mean(0).var(ddof=1) / len(d)
+    lg, h = np.log(auc / (1 - auc)), norm.ppf(0.975) * np.sqrt(var) / (auc * (1 - auc))
+    got = calculate_roc_auc_ci(y, s)
+    assert got[0] == pytest.approx(auc)
+    assert got[1] == pytest.approx(1 / (1 + np.exp(-(lg - h))))
+    assert got[2] == pytest.approx(1 / (1 + np.exp(-(lg + h))))

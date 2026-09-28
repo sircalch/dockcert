@@ -33,6 +33,11 @@ RDKit `CalcRMS` to within 0.006 Å for all 27 poses. Version 1.0.0 was off by up
   carbons. The G atoms were counted as carbon, so poses of macrocyclic ligands had extra atoms and
   could not be compared with the crystal ligand. They are now skipped.
 
+- **ROC-AUC interval.** The ROC-AUC interval in the report is now DeLong's on the logit scale
+  (`calculate_roc_auc_ci`). In a binormal study with known AUC (`validation/auc_ci_coverage.py`) the
+  percentile bootstrap covered 0.87–0.93 and DeLong-logit 0.89–0.95. Both fall short with 20
+  actives and an AUC near 0.92.
+
 ### Added
 - `load_poses()`, `infer_bonds()`, the `elements_dock` argument of
   `calculate_symmetry_corrected_rmsd`, the `ranked_poses` argument of `evaluate_redocking_success`,

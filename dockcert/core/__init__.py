@@ -4,6 +4,7 @@ Core mathematical and validation algorithms for DockCert.
 
 from dockcert.core.enrichment import (
     calculate_roc_auc,
+    calculate_roc_auc_ci,
     calculate_pr_auc,
     calculate_bedroc,
     calculate_rie,
@@ -23,6 +24,7 @@ from dockcert.core.scoring import assess_docking_quality, DockingValidationRepor
 
 __all__ = [
     "calculate_roc_auc",
+    "calculate_roc_auc_ci",
     "calculate_pr_auc",
     "calculate_bedroc",
     "calculate_rie",
