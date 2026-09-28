@@ -26,6 +26,10 @@ RDKit `CalcRMS` to within 0.006 Å for all 27 poses. Version 1.0.0 was off by up
 - The generated methods text says the protocol "was tested" by redocking, not "validated",
   and reports the top-1 RMSD.
 
+- **Enrichment factor cutoff.** The top x % now contains ceil(x·N) compounds, as in RDKit's
+  `CalcEnrichment`; before it was round(x·N). EF_max is computed with the same cutoff. The ROC-AUC,
+  BEDROC, RIE and EF values match RDKit exactly on tie-free scores (`tests/test_enrichment_rdkit.py`).
+
 ### Added
 - `load_poses()`, `infer_bonds()`, the `elements_dock` argument of
   `calculate_symmetry_corrected_rmsd`, the `ranked_poses` argument of `evaluate_redocking_success`,

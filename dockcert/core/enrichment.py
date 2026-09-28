@@ -239,14 +239,15 @@ def calculate_enrichment_factor(
     order = np.argsort(y_scores) if lower_is_better else np.argsort(-y_scores)
     sorted_labels = y_true[order]
     
-    cutoff_n = max(1, int(np.round(fraction * n_total)))
+    # Top x%: ceil(x N) compounds, as in RDKit's CalcEnrichment
+    cutoff_n = max(1, int(np.ceil(fraction * n_total - 1e-9)))
     actives_in_top = np.sum(sorted_labels[:cutoff_n])
-    
+
     # Enrichment Factor
     ef = (actives_in_top / cutoff_n) / (n_actives / n_total)
-    
-    # Maximum possible EF
-    ef_max = min(1.0 / fraction, float(n_total) / float(n_actives))
+
+    # Maximum possible EF with the same cutoff (all top positions filled with actives)
+    ef_max = (min(cutoff_n, n_actives) / cutoff_n) / (n_actives / n_total)
     
     return float(ef), float(ef_max)
 
