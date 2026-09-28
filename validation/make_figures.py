@@ -124,6 +124,30 @@ def table_astex(succ, cases):
     open(os.path.join(TAB, "table_astex.tex"), "w").write("\n".join(lines) + "\n")
 
 
+def table_astex_per_complex(poses, run_status):
+    """Supplementary table: one row per complex."""
+    top = poses[poses["rank"] == 1].set_index("id")
+    best = poses.groupby("id").rmsd_rdkit.min()
+    npose = poses.groupby("id").size()
+    head = (r"Complex & RDKit & DockCert & naive & Hung.\ LB & best & poses & score & heterogens \\")
+    lines = [r"\begin{longtable}{lrrrrrrrp{2.6cm}}",
+             r"\caption{Per-complex redocking results on the Astex Diverse Set (AutoDock Vina 1.2.7). "
+             r"RMSD (\AA) of the top-ranked pose by four definitions, best RMSD over all poses, number of "
+             r"poses, Vina score of the top-ranked pose (kcal/mol) and heterogens kept in the receptor.}"
+             r"\label{tab:s_astex}\\",
+             r"\toprule", head, r"\midrule", r"\endfirsthead",
+             r"\toprule", head, r"\midrule", r"\endhead"]
+    for cid in sorted(top.index):
+        r = top.loc[cid]
+        het = ", ".join(run_status.get(cid, {}).get("kept_heterogens", [])) or "--"
+        cid_tex = cid.replace("_", r"\_")
+        lines.append(f"{cid_tex} & {r.rmsd_rdkit:.2f} & {r.rmsd_dockcert:.2f} & {r.rmsd_naive:.2f} & "
+                     f"{r.rmsd_hung_lb:.2f} & {best[cid]:.2f} & {npose[cid]} & {r.vina_kcal:.2f} & {het} " + r"\\")
+    lines += [r"\bottomrule", r"\end{longtable}"]
+    with open(os.path.join(TAB, "table_s_astex.tex"), "w") as fh:
+        fh.write("\n".join(lines) + "\n")
+
+
 def main():
     os.makedirs(FIG, exist_ok=True)
     os.makedirs(TAB, exist_ok=True)
@@ -136,6 +160,16 @@ def main():
     succ.to_csv(os.path.join(RES, "astex_success.csv"), index=False)
     fig_astex(poses, succ)
     table_astex(succ, cases)
+    import json, zipfile
+    status = {}
+    zp = os.path.join(RES, "astex_vina_outputs.zip")
+    if os.path.exists(zp):
+        with zipfile.ZipFile(zp) as z:
+            for n in z.namelist():
+                if n.endswith("status.json"):
+                    st = json.loads(z.read(n))
+                    status[st["id"]] = st
+    table_astex_per_complex(poses, status)
     print(succ[["method", "criterion", "k", "n", "success", "ci_low", "ci_high"]].to_string(index=False))
 
 
