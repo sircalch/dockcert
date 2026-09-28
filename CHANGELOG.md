@@ -29,9 +29,17 @@ RDKit `CalcRMS` to within 0.006 Å for all 27 poses. Version 1.0.0 was off by up
   `CalcEnrichment`; before it was round(x·N). EF_max is computed with the same cutoff. The ROC-AUC,
   BEDROC, RIE and EF values match RDKit exactly on tie-free scores (`tests/test_enrichment_rdkit.py`).
 
+- **Macrocycles.** meeko closes flexible rings with pairs of G0–G3 pseudo-atoms and CG0–CG3
+  carbons. The G atoms were counted as carbon, so poses of macrocyclic ligands had extra atoms and
+  could not be compared with the crystal ligand. They are now skipped.
+
 ### Added
 - `load_poses()`, `infer_bonds()`, the `elements_dock` argument of
   `calculate_symmetry_corrected_rmsd`, the `ranked_poses` argument of `evaluate_redocking_success`,
   and `rmsd_ranked_poses` in `assess_docking_quality`.
 - CLI: `--docked-pose` reads every pose and `--vina-log` lists the affinities next to each pose's RMSD.
 - Tests on the real redocking outputs (`tests/test_redock_real.py`).
+- `validation/`: redocking benchmark on the Astex Diverse Set (85 complexes, Vina 1.2.7). The
+  DockCert RMSD agrees with RDKit `CalcRMS` within 2·10⁻⁶ Å on 664 of 670 poses. The remaining six
+  poses belong to kainate (1TT1), where RDKit keeps C=O and C–OH distinct and DockCert treats the
+  carboxyl oxygens as equivalent. Also a DUD-E screen and a bootstrap-coverage study.

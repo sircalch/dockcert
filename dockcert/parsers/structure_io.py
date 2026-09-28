@@ -3,8 +3,9 @@ Coordinate extraction from SDF, PDB, and PDBQT molecular structure files.
 
 Multi-pose files are split into poses: MODEL/ENDMDL blocks in PDB/PDBQT (the Vina, Smina and
 GNINA output format) and $$$$-separated records in SDF. In PDBQT files the element is derived
-from the AutoDock atom type (A -> C, OA -> O, NA -> N, SA -> S, HD/HS -> H, ...), not read
-verbatim from the type column.
+from the AutoDock atom type (A -> C, OA -> O, NA -> N, SA -> S, HD/HS -> H, CG0 -> C, ...), not read
+verbatim from the type column; the G0-G3 pseudo-atoms that meeko adds to close flexible rings are
+not atoms and are skipped.
 """
 
 from typing import Tuple, List
@@ -16,7 +17,8 @@ _AD_TYPES = {
     "A": "C", "C": "C", "N": "N", "NA": "N", "NS": "N", "OA": "O", "OS": "O", "O": "O",
     "S": "S", "SA": "S", "H": "H", "HD": "H", "HS": "H", "P": "P", "F": "F", "CL": "CL",
     "Cl": "CL", "BR": "BR", "Br": "BR", "I": "I", "B": "B", "SE": "SE", "Se": "SE",
-    "G0": "C", "G1": "C", "G2": "C", "G3": "C", "CG0": "C", "CG1": "C", "CG2": "C", "CG3": "C",
+    "G0": "DUMMY", "G1": "DUMMY", "G2": "DUMMY", "G3": "DUMMY",   # ring-closure pseudo-atoms (meeko)
+    "CG0": "C", "CG1": "C", "CG2": "C", "CG3": "C",
     "W": "O", "MG": "MG", "Mg": "MG", "ZN": "ZN", "Zn": "ZN", "CA": "CA", "Ca": "CA",
     "FE": "FE", "Fe": "FE", "MN": "MN", "Mn": "MN",
 }
@@ -56,7 +58,7 @@ def _parse_pdb_poses(filepath: str, is_pdbqt: bool) -> List[Pose]:
                 except ValueError:
                     continue
                 elem = _pdb_element(line, is_pdbqt)
-                if elem != "H":                                  # heavy atoms only
+                if elem not in ("H", "DUMMY"):                   # heavy atoms only; no G pseudo-atoms
                     coords.append(xyz)
                     elements.append(elem)
     if coords:                                                   # file without MODEL records

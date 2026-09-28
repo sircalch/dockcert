@@ -41,3 +41,13 @@ def test_redocking_verdicts():
 def test_vina_log_real():
     aff, lb, ub = parse_vina_log(os.path.join(D, "3PTB_vina.log"))
     assert len(aff) == 9 and aff[0] == pytest.approx(-6.087) and lb[0] == 0.0
+
+
+def test_macrocycle_pseudo_atoms_are_skipped():
+    """meeko closes flexible rings with G0/CG0 pairs; G0 is a dummy atom, CG0 a real carbon."""
+    d = os.path.join(os.path.dirname(__file__), "data", "redock_macrocycle")
+    c_ref, el_ref = load_molecule_coordinates(os.path.join(d, "1MZC_BNE_ligand.sdf"))
+    poses = load_poses(os.path.join(d, "1MZC_BNE_out.pdbqt"))
+    assert all(len(c) == len(c_ref) == 35 for c, _ in poses)
+    r = calculate_symmetry_corrected_rmsd(c_ref, poses[0][0], elements=el_ref, elements_dock=poses[0][1])
+    assert np.isfinite(r)

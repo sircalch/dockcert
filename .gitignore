@@ -56,3 +56,4 @@ ENV/
 dockcert_output/
 dockcert_demo_output/
 *.log
+validation/vina.exe
