@@ -82,7 +82,7 @@ def dock(job):
                    "--out", os.path.join(td, "out.pdbqt")]
             for _attempt in range(2):                 # one retry for transient failures
                 r = subprocess.run(cmd, capture_output=True, text=True)
-                m = re.search(r"^\s+1\s+(-?\d+\.\d+)", r.stdout, re.M)
+                m = re.search(r"^\s+1\s+(-?\d+(?:\.\d+)?)\s", r.stdout, re.M)   # Vina writes -7, not -7.000
                 if m:
                     break
             if not m:

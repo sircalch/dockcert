@@ -204,6 +204,25 @@ def table_coverage(boot, delong):
         fh.write("\n".join(lines) + "\n")
 
 
+def table_dude(m):
+    """DUD-E enrichment metrics with 95% intervals (DeLong for ROC-AUC, bootstrap otherwise)."""
+    names = {"ampc": "AmpC", "inha": "InhA"}
+    lines = [r"\begin{tabular}{lrrrrrr}", r"\toprule",
+             r"Target & actives / decoys & ROC-AUC & BEDROC ($\alpha=20$) & BEDROC ($\alpha=80.5$) & EF$_{1\%}$ (max) & EF$_{5\%}$ \\",
+             r"\midrule"]
+    for _, r in m.iterrows():
+        lines.append(
+            f"{names.get(r.target, r.target)} & {int(r.actives)} / {int(r.decoys)} & "
+            f"{r.auc:.2f} [{r.auc_lo:.2f}, {r.auc_hi:.2f}] & "
+            f"{r.bedroc20:.2f} [{r.bedroc20_lo:.2f}, {r.bedroc20_hi:.2f}] & "
+            f"{r.bedroc80:.2f} [{r.bedroc80_lo:.2f}, {r.bedroc80_hi:.2f}] & "
+            f"{r.ef1:.1f} [{r.ef1_lo:.1f}, {r.ef1_hi:.1f}] ({r.ef1_max:.0f}) & "
+            f"{r.ef5:.1f} [{r.ef5_lo:.1f}, {r.ef5_hi:.1f}] " + r"\\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    with open(os.path.join(TAB, "table_dude.tex"), "w") as fh:
+        fh.write("\n".join(lines) + "\n")
+
+
 def main():
     os.makedirs(FIG, exist_ok=True)
     os.makedirs(TAB, exist_ok=True)
@@ -231,6 +250,9 @@ def main():
         boot, delong = pd.read_csv(bp), pd.read_csv(dp)
         fig_coverage(boot, delong)
         table_coverage(boot, delong)
+    mp = os.path.join(RES, "dude_metrics.csv")
+    if os.path.exists(mp):
+        table_dude(pd.read_csv(mp))
     print(succ[["method", "criterion", "k", "n", "success", "ci_low", "ci_high"]].to_string(index=False))
 
 
