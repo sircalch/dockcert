@@ -57,3 +57,6 @@ dockcert_output/
 dockcert_demo_output/
 *.log
 validation/vina.exe
+
+# real Vina logs used by the regression tests
+!tests/data/redock/*.log
