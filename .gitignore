@@ -60,3 +60,4 @@ validation/vina.exe
 
 # real Vina logs used by the regression tests
 !tests/data/redock/*.log
+validation/data/posebusters_paper_results.csv
