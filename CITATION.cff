@@ -8,7 +8,7 @@ authors:
 title: "DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies"
 version: "1.1.0"
 doi: 10.5281/zenodo.22217570
-date-released: 2026-08-31
+date-released: 2026-09-30
 url: "https://github.com/sircalch/dockcert"
 repository-code: "https://github.com/sircalch/dockcert"
 keywords:
