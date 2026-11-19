@@ -128,14 +128,22 @@ If you use DockCert to evaluate molecular docking validation or virtual screenin
 
 ```bibtex
 @software{monreal2026dockcert,
-  author = {Monreal-Hern{\'a}ndez, Andre},
+  author = {Monreal-Hern{\'a}ndez, Andr{\'e}s},
   title = {{DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies}},
   year = {2026},
-  version = {1.0.0},
+  version = {1.1.0},
   publisher = {Zenodo},
+  doi = {10.5281/zenodo.22217570},
   url = {https://github.com/sircalch/dockcert}
 }
 ```
+
+The DOI above always resolves to the latest archived version. The repository's [`CITATION.cff`](CITATION.cff) is the canonical citation record; GitHub's "Cite this repository" button uses it.
+
+### Project page
+
+Release record and related tools: [dockcert on the author's site](https://sircalch.github.io/software/dockcert/) · [quality-control and reproducibility family](https://sircalch.github.io/software/quality-control/).
+
 
 ---
 
