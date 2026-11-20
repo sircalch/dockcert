@@ -58,16 +58,21 @@ dev = [
     "build>=0.10.0",
     "twine>=4.0.0"
 ]
+docs = [
+    "mkdocs>=1.6",
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.26"
+]
 
 [project.scripts]
 dockcert = "dockcert.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/sircalch/dockcert"
-Documentation = "https://github.com/sircalch/dockcert#readme"
+Documentation = "https://sircalch.github.io/dockcert/"
 Repository = "https://github.com/sircalch/dockcert.git"
 "Bug Tracker" = "https://github.com/sircalch/dockcert/issues"
-Changelog = "https://github.com/sircalch/dockcert/blob/main/CHANGELOG.md"
+Changelog = "https://github.com/sircalch/dockcert/blob/master/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 include = ["dockcert*"]

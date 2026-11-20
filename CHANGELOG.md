@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- Documentation site with tutorials, an explanation of every check, validation results and API reference: <https://sircalch.github.io/dockcert/>.
+- Worked example `examples/redock_to_report.py` (real AutoDock Vina redocking of three crystal complexes and a screening validation), with a walkthrough in the documentation.
+- Support and governance statement in `CONTRIBUTING.md`, linked from the README and the documentation.
+
 ## 1.1.0 (2026-09-27)
 
 Validated against real AutoDock Vina 1.2.7 redocking of trypsin–benzamidine (3PTB), streptavidin–biotin
