@@ -3,8 +3,8 @@ DockCert: Automated Statistical Validation, Enrichment Metrics, and Reproducibil
 Assessment for Molecular Docking and Virtual Screening Studies.
 """
 
-__version__ = "1.2.0"
-__author__ = "Andres Monreal-Hernández"
+__version__ = "1.2.1"
+__author__ = "Andrés Monreal-Hernández"
 __license__ = "MIT"
 
 from dockcert.core.enrichment import (
