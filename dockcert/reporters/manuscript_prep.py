@@ -2,6 +2,7 @@
 Manuscript Methods text generator, LaTeX summary tables, and BibTeX citations for DockCert.
 """
 
+from dockcert import __version__
 from typing import Dict, Any
 import os
 import pandas as pd
@@ -113,7 +114,7 @@ def generate_docking_manuscript_assets(
             bias_str = f" Physicochemical decoy matching was verified with {report.decoy_bias_result['risk_level'].lower()} risk of artificial bias."
             
         enrich_text = (
-            f"Virtual screening discrimination and early enrichment were statistically assessed using DockCert v1.0.0 (Monreal-Hernández, 2026), "
+            f"Virtual screening discrimination and early enrichment were statistically assessed using DockCert v{__version__} (Monreal-Hernández, 2026), "
             f"yielding {metrics_combined} with 95% stratified bootstrap confidence intervals across {report.dataset_summary.get('n_actives', 0)} active and {report.dataset_summary.get('n_decoys', 0)} decoy molecules.{bias_str}"
         )
         
@@ -128,10 +129,10 @@ def generate_docking_manuscript_assets(
     # 3. BibTeX Citation File
     bib_path = os.path.join(output_dir, "citation.bib")
     bib_content = """@software{monreal2026dockcert,
-  author = {Monreal-Hern\\'andez, Andre},
+  author = {Monreal-Hernández, Andrés},
   title = {{DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies}},
   year = {2026},
-  version = {1.0.0},
+  version = {""" + __version__ + """},
   publisher = {Zenodo},
   url = {https://github.com/sircalch/dockcert}
 }

@@ -136,10 +136,10 @@ If you use DockCert to evaluate molecular docking validation or virtual screenin
 
 ```bibtex
 @software{monreal2026dockcert,
-  author = {Monreal-Hern{\'a}ndez, Andr{\'e}s},
+  author = {Monreal-Hernández, Andrés},
   title = {{DockCert: An Open-Source Toolkit for Statistical Validation, Enrichment Metrics, and Reproducibility Assessment of Molecular Docking Studies}},
   year = {2026},
-  version = {1.1.0},
+  version = {1.2.1},
   publisher = {Zenodo},
   doi = {10.5281/zenodo.22217570},
   url = {https://github.com/sircalch/dockcert}

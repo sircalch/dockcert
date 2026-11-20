@@ -297,7 +297,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         </div>
 
         <footer>
-            Generated automatically by <strong>DockCert v1.0.0</strong> &bull; Molecular Docking Validation & Statistical Quality Toolkit &bull; Monreal-Hernández, 2026.
+            Generated automatically by <strong>DockCert v{{ version }}</strong> &bull; Molecular Docking Validation & Statistical Quality Toolkit &bull; Monreal-Hernández, 2026.
         </footer>
     </div>
 
@@ -329,7 +329,8 @@ def generate_docking_html_report(
     rendered = template.render(
         report=report,
         methods_text=methods_text,
-        citation_bib=citation_bib
+        citation_bib=citation_bib,
+        version=__import__("dockcert").__version__
     )
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(rendered)
